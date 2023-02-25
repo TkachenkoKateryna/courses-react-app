@@ -14,18 +14,22 @@ const App: FC = () => {
 	const [authors, setAuthors] = useState(mockedAuthorsList);
 	const [searchText, setSearchText] = useState('');
 
-	const updatedCourses: CourseView[] = courses.map((c) => ({
-		...c,
-		duration: getCourseDuration(c.duration),
-		creationDate: formatCreationDate(c.creationDate),
-		authors: c.authors
-			.map((id) => {
-				const author = mockedAuthorsList.find((a) => a.id === id);
-				return author?.name || '';
-			})
-			.filter(Boolean)
-			.join(', '),
-	}));
+	const updatedCourses: CourseView[] = courses
+		.map((c) => ({
+			...c,
+			duration: getCourseDuration(c.duration),
+			creationDate: formatCreationDate(c.creationDate),
+			authors: c.authors
+				.map((id) => {
+					const author = mockedAuthorsList.find((a) => a.id === id);
+					return author?.name || '';
+				})
+				.filter(Boolean)
+				.join(', '),
+		}))
+		.filter((course) =>
+			course.title.toLowerCase().includes(searchText.toLowerCase())
+		);
 
 	const courseFormHandler = () => {
 		setIsShowForm((prevState) => !prevState);
@@ -56,9 +60,9 @@ const App: FC = () => {
 	};
 
 	return (
-		<div>
+		<>
 			<Header />
-			{isShowForm === true ? (
+			{isShowForm ? (
 				<CreateCourse
 					addCourse={addCourseHandler}
 					addAuthor={addAuthorHandler}
@@ -67,14 +71,12 @@ const App: FC = () => {
 				/>
 			) : (
 				<Courses
-					courses={updatedCourses.filter((course) =>
-						course.title.toLowerCase().includes(searchText.toLowerCase())
-					)}
+					courses={updatedCourses}
 					setPageView={courseFormHandler}
 					searchOnCourses={searchOnCoursesHandler}
 				/>
 			)}
-		</div>
+		</>
 	);
 };
 
