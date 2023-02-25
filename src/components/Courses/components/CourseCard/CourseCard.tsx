@@ -2,6 +2,7 @@ import { FC } from 'react';
 import styled from 'styled-components';
 
 import Button from '../../../../common/Button/Button';
+import { Link } from 'react-router-dom';
 
 interface Props {
 	course: CourseView;
@@ -30,7 +31,9 @@ export const CourseCard: FC<Props> = ({ course }) => {
 				</Details>
 			</Content>
 			<Actions>
-				<Button buttonText='Show course' />
+				<Link to={`/courses/${course.id}`}>
+					<Button buttonText='Show course' />
+				</Link>
 			</Actions>
 		</Root>
 	);
@@ -88,7 +91,6 @@ const MainInfo = styled.div`
 		text-overflow: ellipsis;
 		-webkit-box-orient: vertical;
 		overflow: hidden;
-		height: 60px;
 	}
 
 	@media screen and (min-width: 700px) {

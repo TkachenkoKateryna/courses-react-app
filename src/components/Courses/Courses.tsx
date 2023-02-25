@@ -1,70 +1,92 @@
-import { FC } from 'react';
-import styled from 'styled-components';
+import { FC, useState } from 'react';
+import { Route, Routes } from 'react-router-dom';
+import { v4 as uuidv4 } from 'uuid';
 
-import Button from '../../common/Button/Button';
-import { CourseCard } from './components/CourseCard/CourseCard';
-import SearchBar from './components/SearchBar/SearchBar';
+import {
+	mockedAuthorsList,
+	mockedCoursesList,
+} from '../../constants/constants';
+import { formatCreationDate } from '../../helpers/formatCreationDate';
+import { getCourseDuration } from '../../helpers/getCourseDuration';
+import CreateCourse from '../CreateCourseForm/CreateCourseForm';
+import CourseInfo from './components/CourseInfo/CourseInfo';
+import CoursesView from './components/CoursesView/CoursesView';
 
-interface Props {
-	courses: CourseView[];
-	setPageView: () => void;
-	searchOnCourses: (searchText: string) => void;
-}
+const Courses: FC = () => {
+	const [courses, setCourses] = useState(mockedCoursesList);
+	const [authors, setAuthors] = useState(mockedAuthorsList);
+	const [searchText, setSearchText] = useState('');
 
-const Courses: FC<Props> = ({ courses, setPageView, searchOnCourses }) => {
+	const updatedCourses: CourseView[] = courses.map((c) => ({
+		...c,
+		duration: getCourseDuration(c.duration),
+		creationDate: formatCreationDate(c.creationDate),
+		authors: c.authors
+			.map((id) => {
+				const author = mockedAuthorsList.find((a) => a.id === id);
+				return author?.name || '';
+			})
+			.filter(Boolean)
+			.join(', '),
+	}));
+
+	const addCourseHandler = (formCourseValues: CreateCourseFormValues) => {
+		console.log('formCourseValues', formCourseValues);
+		const newCourse: Course = {
+			...formCourseValues,
+			id: uuidv4(),
+			creationDate: new Date().toLocaleDateString('en-GB'),
+		};
+
+		setCourses((prevState) => [...prevState, newCourse]);
+	};
+
+	const addAuthorHandler = (formAuthorValues: CreateAuthorFormValues) => {
+		const newAuthor: Author = {
+			...formAuthorValues,
+			id: uuidv4(),
+		};
+
+		setAuthors((prevState) => [...prevState, newAuthor]);
+	};
+
+	const searchOnCoursesHandler = (value: string) => {
+		setSearchText(value);
+	};
+
+	const getCourseByIdHandler = (courseId: string) => {
+		return updatedCourses.find((c) => c.id === courseId);
+	};
+
 	return (
-		<Root>
-			<div className='panel'>
-				<SearchBar searchOnCourses={searchOnCourses} />
-				<div className='actions'>
-					<Button buttonText='Add new course' onClick={setPageView} />
-				</div>
-			</div>
-			<div className='course-list'>
-				{courses.map((c) => (
-					<CourseCard course={c} key={c.id} />
-				))}
-			</div>
-		</Root>
+		<Routes>
+			<Route
+				path=''
+				element={
+					<CoursesView
+						courses={updatedCourses.filter((course) =>
+							course.title.toLowerCase().includes(searchText.toLowerCase())
+						)}
+						searchOnCourses={searchOnCoursesHandler}
+					/>
+				}
+			/>
+			<Route
+				path='add'
+				element={
+					<CreateCourse
+						addCourse={addCourseHandler}
+						addAuthor={addAuthorHandler}
+						authors={authors}
+					/>
+				}
+			/>
+			<Route
+				path={':courseId'}
+				element={<CourseInfo getCourseById={getCourseByIdHandler} />}
+			/>
+		</Routes>
 	);
 };
 
 export default Courses;
-
-const Root = styled.div`
-	max-width: 1300px;
-	margin: 0 auto;
-	padding: 20px;
-	box-sizing: border-box;
-
-	.panel {
-		display: flex;
-		justify-content: space-between;
-		margin-bottom: 20px;
-
-		div:first-of-type {
-			margin-right: 30px;
-		}
-
-		.actions {
-			display: flex;
-			width: 30%;
-			justify-content: end;
-		}
-	}
-
-	@media screen and (max-width: 700px) {
-		margin: 0;
-	}
-
-	.course-list {
-		display: flex;
-		flex-wrap: wrap;
-		margin: 0 -20px 0 0;
-		box-sizing: border-box;
-
-		@media screen and (max-width: 700px) {
-			margin: 0;
-		}
-	}
-`;
