@@ -3,7 +3,8 @@ import { AppContext, IAppContext } from './AppContext';
 import agent from './../api/agent';
 
 const AppContextProvider: FC<PropsWithChildren> = ({ children }) => {
-	const [user, setUser] = useState<User>({ name: '', email: '' });
+	const initialUserState = { name: '', email: '' };
+	const [user, setUser] = useState<User>(initialUserState);
 
 	const loginHandler = async (values: AuthFormValues) => {
 		const data = await agent.Auth.login(values);
@@ -14,7 +15,7 @@ const AppContextProvider: FC<PropsWithChildren> = ({ children }) => {
 
 	const logoutHandler = () => {
 		localStorage.removeItem('jwt');
-		setUser({ name: '', email: '' });
+		setUser(initialUserState);
 	};
 
 	const value: IAppContext = {

@@ -17,18 +17,22 @@ const Courses: FC = () => {
 	const [authors, setAuthors] = useState(mockedAuthorsList);
 	const [searchText, setSearchText] = useState('');
 
-	const updatedCourses: CourseView[] = courses.map((c) => ({
-		...c,
-		duration: getCourseDuration(c.duration),
-		creationDate: formatCreationDate(c.creationDate),
-		authors: c.authors
-			.map((id) => {
-				const author = mockedAuthorsList.find((a) => a.id === id);
-				return author?.name || '';
-			})
-			.filter(Boolean)
-			.join(', '),
-	}));
+	const updatedCourses: CourseView[] = courses
+		.map((c) => ({
+			...c,
+			duration: getCourseDuration(c.duration),
+			creationDate: formatCreationDate(c.creationDate),
+			authors: c.authors
+				.map((id) => {
+					const author = mockedAuthorsList.find((a) => a.id === id);
+					return author?.name || '';
+				})
+				.filter(Boolean)
+				.join(', '),
+		}))
+		.filter((course) =>
+			course.title.toLowerCase().includes(searchText.toLowerCase())
+		);
 
 	const addCourseHandler = (formCourseValues: CreateCourseFormValues) => {
 		console.log('formCourseValues', formCourseValues);
@@ -64,9 +68,7 @@ const Courses: FC = () => {
 				path=''
 				element={
 					<CoursesView
-						courses={updatedCourses.filter((course) =>
-							course.title.toLowerCase().includes(searchText.toLowerCase())
-						)}
+						courses={updatedCourses}
 						searchOnCourses={searchOnCoursesHandler}
 					/>
 				}
