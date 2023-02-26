@@ -1,25 +1,22 @@
-import { FC, useState, SyntheticEvent } from 'react';
+import { FC, SyntheticEvent, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 import Button from '../../common/Button/Button';
 import Input from '../../common/Input/Input';
+import { getCourseDuration } from '../../helpers/getCourseDuration';
 import AuthorItem from './components/AuthorItem/AuthorItem';
 import CreateAuthorForm from './components/CreateAuthorForm/CreateAuthorForm';
-import { getCourseDuration } from '../../helpers/getCourseDuration';
 
 interface Props {
 	addCourse: (newCourse: CreateCourseFormValues) => void;
 	addAuthor: (newAuthor: CreateAuthorFormValues) => void;
 	authors: Author[];
-	setPageView: () => void;
 }
 
-const CreateCourse: FC<Props> = ({
-	addCourse,
-	addAuthor,
-	authors,
-	setPageView,
-}) => {
+const CreateCourse: FC<Props> = ({ addCourse, addAuthor, authors }) => {
+	const navigate = useNavigate();
+
 	const [courseForm, setCourseForm] = useState<CreateCourseFormValues>({
 		title: '',
 		description: '',
@@ -48,6 +45,7 @@ const CreateCourse: FC<Props> = ({
 		}
 
 		addCourse(courseForm);
+		navigate('/courses');
 	};
 
 	const onChangeHandler = (name: string, value: string) => {
@@ -102,7 +100,9 @@ const CreateCourse: FC<Props> = ({
 	return (
 		<Root>
 			<div className='navigation'>
-				<Button buttonText='Return to Courses page' onClick={setPageView} />
+				<Link to='/'>
+					<Button buttonText='Return to Courses page' />
+				</Link>
 			</div>
 			<div className='course-form-wrapper'>
 				<h2>Create Course</h2>
@@ -195,9 +195,6 @@ const Root = styled.div`
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
-	margin: 0 auto;
-	max-width: 1300px;
-	height: fit-content;
 	padding: 20px;
 	box-sizing: border-box;
 	flex-wrap: wrap;

@@ -15,3 +15,25 @@ interface CreateCourseFormErrors {
 interface CreateAuthorFormValues {
 	name: string;
 }
+
+interface AuthFormValues {
+	name: string;
+	email: string;
+	password: string;
+}
+
+interface AuthFormErrors {
+	name: string;
+	email: string;
+	password: string;
+}
+
+interface LoginResponse {
+	result: string;
+	user: User;
+}
+
+interface RegisterResponse {
+	successful: string;
+	errors: string[];
+}
