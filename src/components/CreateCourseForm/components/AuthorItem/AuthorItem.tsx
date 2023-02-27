@@ -19,11 +19,12 @@ const AuthorItem: FC<Props> = ({
 		<div className={className}>
 			<p>{author.name}</p>
 			<Button
-				buttonText={isInCourse ? '-' : '+'}
 				onClick={() => {
 					addAuthorToCourse(author.id);
 				}}
-			/>
+			>
+				{isInCourse ? '-' : '+'}
+			</Button>
 		</div>
 	);
 };

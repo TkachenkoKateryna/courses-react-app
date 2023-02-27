@@ -5,6 +5,7 @@ import styled from 'styled-components';
 import agent from '../../../api/agent';
 import Button from '../../../common/Button/Button';
 import Input from '../../../common/Input/Input';
+import { getFieldName } from '../../../helpers/common';
 
 interface Props {
 	className?: string;
@@ -54,7 +55,7 @@ const RegistrationForm: FC<Props> = ({ className }) => {
 		}
 
 		errors.forEach((err) => {
-			const name = err.substr(0, err.indexOf(' ')).replaceAll("'", '');
+			const name = getFieldName(err);
 			setRegistrationFormErrors((prevState) => ({
 				...prevState,
 				[name]: err,
@@ -93,7 +94,7 @@ const RegistrationForm: FC<Props> = ({ className }) => {
 					errorText={registrationErrors.password}
 					hasError={hasError}
 				/>
-				<Button buttonText='Registration' />
+				<Button>Registration</Button>
 			</form>
 			<p>
 				If you have an account you can <Link to='/auth/login'>login</Link>

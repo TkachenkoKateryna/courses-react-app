@@ -1,10 +1,13 @@
 import { FC, SyntheticEvent, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
+import agent from '../../../api/agent';
 import Button from '../../../common/Button/Button';
 import Input from '../../../common/Input/Input';
-import { useAppContext } from '../../../store/AppContext';
+import { getFieldName } from '../../../helpers/common';
+import { loginActionCreator } from '../../../store/user/user.actions';
 
 interface Props {
 	className?: string;
@@ -12,8 +15,7 @@ interface Props {
 
 const LoginForm: FC<Props> = ({ className }) => {
 	const navigate = useNavigate();
-
-	const { loginHandler } = useAppContext();
+	const dispatch = useDispatch();
 
 	const [loginForm, setLoginForm] = useState<AuthFormValues>({
 		name: '',
@@ -40,6 +42,28 @@ const LoginForm: FC<Props> = ({ className }) => {
 		setLoginForm((prevState) => ({ ...prevState, [name]: value }));
 	};
 
+	const loginHandler = async (values: AuthFormValues) => {
+		const data = await agent.Auth.login(values);
+
+		if (data.successful) {
+			dispatch(loginActionCreator(data));
+			localStorage.setItem('jwt', data.result);
+			navigate('/');
+		}
+
+		if (data.errors) {
+			data.errors.forEach((err) => {
+				const name = getFieldName(err);
+				setLoginFormErrors((prevState) => ({
+					...prevState,
+					[name]: err,
+				}));
+			});
+		}
+
+		setHasError(true);
+	};
+
 	const submitHandler = async (event: SyntheticEvent) => {
 		event.preventDefault();
 
@@ -49,7 +73,6 @@ const LoginForm: FC<Props> = ({ className }) => {
 		}
 
 		await loginHandler(loginForm);
-		navigate('/');
 	};
 
 	return (
@@ -82,7 +105,7 @@ const LoginForm: FC<Props> = ({ className }) => {
 					errorText={loginFormErrors.password}
 					hasError={hasError}
 				/>
-				<Button buttonText='Login' />
+				<Button>Login</Button>
 			</form>
 			<p>
 				If you have an account you can <Link to='/auth/register'>register</Link>

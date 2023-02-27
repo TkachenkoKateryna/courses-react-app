@@ -23,8 +23,28 @@ const Auth = {
 	},
 };
 
+const Authors = {
+	get: async (): Promise<ApiResponse<Author[]>> => {
+		const response = await fetch(`${baseURL}/authors/all`, {
+			method: 'GET',
+		});
+		return response.json();
+	},
+};
+
+const Courses = {
+	get: async (): Promise<ApiResponse<Course[]>> => {
+		const response = await fetch(`${baseURL}/courses/all`, {
+			method: 'GET',
+		});
+		return response.json();
+	},
+};
+
 const agent = {
 	Auth,
+	Authors,
+	Courses,
 };
 
 export default agent;

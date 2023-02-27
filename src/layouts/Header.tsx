@@ -1,27 +1,37 @@
 import { FC } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
+import { useSelector, useDispatch } from 'react-redux';
 
 import { ReactComponent as ReactLogo } from '../assets/images/logo.svg';
 import Button from '../common/Button/Button';
-import { useAppContext } from '../store/AppContext';
+import { logoutActionCreator } from '../store/user/user.actions';
+import { isUserAuthorized, getUser } from '../store/user/user.selectors';
 
 const Header: FC = () => {
-	const { user, logoutHandler } = useAppContext();
+	const dispatch = useDispatch();
+
+	const user = useSelector(getUser);
+	const isAuth = useSelector(isUserAuthorized);
+
+	const logoutHandler = () => {
+		dispatch(logoutActionCreator());
+		localStorage.removeItem('jwt');
+	};
 
 	return (
 		<Root>
 			<div className='header-center'>
 				<ReactLogo />
-				{user?.name ? (
+				{isAuth ? (
 					<div className='actions'>
 						<h3>{user?.name}</h3>
-						<Button buttonText='Logout' onClick={logoutHandler} />
+						<Button onClick={logoutHandler}>Logout</Button>
 					</div>
 				) : (
 					<div className='actions'>
 						<Link to='/auth/login'>
-							<Button buttonText='Login' />
+							<Button>Login</Button>
 						</Link>
 					</div>
 				)}

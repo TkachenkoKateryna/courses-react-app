@@ -18,7 +18,7 @@ const CourseInfo: FC<Props> = ({ getCourseById }) => {
 	return (
 		<Root>
 			<Link to='/'>
-				<Button buttonText='Back to courses' />
+				<Button>Back to courses</Button>
 			</Link>
 			<h2>{course.title}</h2>
 			<div className='main-info'>

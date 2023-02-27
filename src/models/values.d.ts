@@ -27,13 +27,3 @@ interface AuthFormErrors {
 	email: string;
 	password: string;
 }
-
-interface LoginResponse {
-	result: string;
-	user: User;
-}
-
-interface RegisterResponse {
-	successful: string;
-	errors: string[];
-}
