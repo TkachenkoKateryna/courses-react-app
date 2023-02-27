@@ -1,14 +1,18 @@
 import { FC } from 'react';
 import styled from 'styled-components';
+import { useDispatch } from 'react-redux';
 
 import Button from '../../../../common/Button/Button';
 import { Link } from 'react-router-dom';
+import { deleteCourseActionCreator } from '../../../../store/courses/courses.actions';
 
 interface Props {
 	course: CourseView;
 }
 
 export const CourseCard: FC<Props> = ({ course }) => {
+	const dispatch = useDispatch();
+
 	return (
 		<Root>
 			<Content>
@@ -34,6 +38,16 @@ export const CourseCard: FC<Props> = ({ course }) => {
 				<Link to={`/courses/${course.id}`}>
 					<Button buttonText='Show course' />
 				</Link>
+				<Button>
+					<span className='material-icons'>edit</span>
+				</Button>
+				<Button
+					onClick={() => {
+						dispatch(deleteCourseActionCreator(course.id));
+					}}
+				>
+					<span className='material-icons'>delete</span>
+				</Button>
 			</Actions>
 		</Root>
 	);
@@ -127,5 +141,10 @@ const Details = styled.div`
 `;
 
 const Actions = styled.div`
+	display: flex;
 	align-self: flex-end;
+
+	& > * {
+		margin-left: 5px;
+	}
 `;

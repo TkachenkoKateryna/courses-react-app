@@ -1,21 +1,53 @@
-import { FC, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { Route, Routes } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
 import { v4 as uuidv4 } from 'uuid';
 
-import {
-	mockedAuthorsList,
-	mockedCoursesList,
-} from '../../constants/constants';
 import { formatCreationDate } from '../../helpers/formatCreationDate';
 import { getCourseDuration } from '../../helpers/getCourseDuration';
 import CreateCourse from '../CreateCourseForm/CreateCourseForm';
 import CourseInfo from './components/CourseInfo/CourseInfo';
 import CoursesView from './components/CoursesView/CoursesView';
+import agent from '../../api/agent';
+import { getAuthors } from '../../store/authors/authors.selectors';
+import { getCourses } from '../../store/courses/courses.selectors';
+import {
+	addAuthorActionCreator,
+	getAuthorsActionCreator,
+} from '../../store/authors/authors.actions';
+import {
+	addCourseActionCreator,
+	getCoursesActionCreator,
+} from '../../store/courses/courses.actions';
 
 const Courses: FC = () => {
-	const [courses, setCourses] = useState(mockedCoursesList);
-	const [authors, setAuthors] = useState(mockedAuthorsList);
 	const [searchText, setSearchText] = useState('');
+
+	const dispatch = useDispatch();
+
+	const authors = useSelector(getAuthors);
+	const courses = useSelector(getCourses);
+
+	useEffect(() => {
+		const fetchAuthors = async () => {
+			const { successful, result: authors } = await agent.Authors.get();
+
+			if (successful) {
+				dispatch(getAuthorsActionCreator(authors));
+			}
+		};
+
+		const fetchCourses = async () => {
+			const { successful, result: courses } = await agent.Courses.get();
+
+			if (successful) {
+				dispatch(getCoursesActionCreator(courses));
+			}
+		};
+
+		fetchAuthors();
+		fetchCourses();
+	}, []);
 
 	const updatedCourses: CourseView[] = courses
 		.map((c) => ({
@@ -24,7 +56,7 @@ const Courses: FC = () => {
 			creationDate: formatCreationDate(c.creationDate),
 			authors: c.authors
 				.map((id) => {
-					const author = mockedAuthorsList.find((a) => a.id === id);
+					const author = authors.find((a) => a.id === id);
 					return author?.name || '';
 				})
 				.filter(Boolean)
@@ -42,7 +74,7 @@ const Courses: FC = () => {
 			creationDate: new Date().toLocaleDateString('en-GB'),
 		};
 
-		setCourses((prevState) => [...prevState, newCourse]);
+		dispatch(addCourseActionCreator(newCourse));
 	};
 
 	const addAuthorHandler = (formAuthorValues: CreateAuthorFormValues) => {
@@ -51,7 +83,7 @@ const Courses: FC = () => {
 			id: uuidv4(),
 		};
 
-		setAuthors((prevState) => [...prevState, newAuthor]);
+		dispatch(addAuthorActionCreator(newAuthor));
 	};
 
 	const searchOnCoursesHandler = (value: string) => {

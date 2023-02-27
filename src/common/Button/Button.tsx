@@ -1,10 +1,9 @@
-import { FC } from 'react';
+import { FC, PropsWithChildren } from 'react';
 import styled from 'styled-components';
 
-interface Props {
+interface Props extends PropsWithChildren {
 	buttonText?: string;
 	onClick?: () => void;
-	children?: string;
 	className?: string;
 	disabled?: boolean;
 }
@@ -24,7 +23,8 @@ const Button: FC<Props> = ({
 };
 
 export default styled(Button)`
-	width: 120px;
+	width: fit-content;
+	padding: 10px;
 	height: 40px;
 	background: rgb(90, 106, 206);
 	color: white;

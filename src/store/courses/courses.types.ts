@@ -1,0 +1,6 @@
+export enum coursesTypes {
+	GET = 'COURSES/GET',
+	ADD = 'COURSES/ADD',
+	DELETE = 'COURSES/DELETE',
+	UPDATE = 'COURSES/UPDATE',
+}

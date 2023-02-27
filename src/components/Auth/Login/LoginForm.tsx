@@ -1,10 +1,12 @@
 import { FC, SyntheticEvent, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
+import { useDispatch } from 'react-redux';
 
 import Button from '../../../common/Button/Button';
 import Input from '../../../common/Input/Input';
-import { useAppContext } from '../../../store/AppContext';
+import { loginActionCreator } from '../../../store/user/user.actions';
+import agent from '../../../api/agent';
 
 interface Props {
 	className?: string;
@@ -12,8 +14,7 @@ interface Props {
 
 const LoginForm: FC<Props> = ({ className }) => {
 	const navigate = useNavigate();
-
-	const { loginHandler } = useAppContext();
+	const dispatch = useDispatch();
 
 	const [loginForm, setLoginForm] = useState<AuthFormValues>({
 		name: '',
@@ -38,6 +39,12 @@ const LoginForm: FC<Props> = ({ className }) => {
 		}));
 
 		setLoginForm((prevState) => ({ ...prevState, [name]: value }));
+	};
+
+	const loginHandler = async (values: AuthFormValues) => {
+		const data = await agent.Auth.login(values);
+		dispatch(loginActionCreator(data));
+		localStorage.setItem('jwt', data.result);
 	};
 
 	const submitHandler = async (event: SyntheticEvent) => {

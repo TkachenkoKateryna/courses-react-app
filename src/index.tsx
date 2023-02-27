@@ -1,15 +1,16 @@
 import React from 'react';
 import { createRoot } from 'react-dom/client';
+import { Provider } from 'react-redux';
 import { RouterProvider } from 'react-router-dom';
 import './index.css';
 import { router } from './router/routes';
-import AppContextProvider from './store/AppContextProvider';
+import { store } from './store/store';
 
 const Index: React.FC = () => {
 	return (
-		<AppContextProvider>
+		<Provider store={store}>
 			<RouterProvider router={router} />
-		</AppContextProvider>
+		</Provider>
 	);
 };
 
