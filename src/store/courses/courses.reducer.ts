@@ -16,25 +16,21 @@ export const coursesReducer = (
 	switch (action.type) {
 		case coursesTypes.GET:
 			return {
-				...state,
 				courses: action.payload,
 			};
 		case coursesTypes.ADD:
 			return {
-				...state,
 				courses: [...state.courses, action.payload],
 			};
 		case coursesTypes.DELETE:
 			return {
-				...state,
 				courses: state.courses.filter((a) => a.id !== action.payload),
 			};
 		case coursesTypes.UPDATE:
 			return {
-				...state,
 				courses: state.courses.map<Course>((c) => {
 					if (c.id === action.payload.id) {
-						c = action.payload;
+						return action.payload;
 					}
 					return c;
 				}),

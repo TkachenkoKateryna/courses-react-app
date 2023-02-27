@@ -16,12 +16,10 @@ export const authorsReducer = (
 	switch (action.type) {
 		case authorsTypes.GET:
 			return {
-				...state,
 				authors: action.payload,
 			};
 		case authorsTypes.ADD:
 			return {
-				...state,
 				authors: [...state.authors, action.payload],
 			};
 		default:

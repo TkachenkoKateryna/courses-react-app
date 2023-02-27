@@ -23,18 +23,20 @@ const SearchBar: FC<Props> = ({ searchOnCourses, className }) => {
 			/>
 			<div className='actions'>
 				<Button
-					buttonText='Cancel'
 					onClick={() => {
 						setText('');
 						searchOnCourses('');
 					}}
-				/>
+				>
+					Cancel
+				</Button>
 				<Button
-					buttonText='Search'
 					onClick={() => {
 						searchOnCourses(text);
 					}}
-				/>
+				>
+					Search
+				</Button>
 			</div>
 		</div>
 	);

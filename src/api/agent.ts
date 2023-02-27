@@ -24,7 +24,7 @@ const Auth = {
 };
 
 const Authors = {
-	get: async (): Promise<GetAuthorsResponse> => {
+	get: async (): Promise<ApiResponse<Author[]>> => {
 		const response = await fetch(`${baseURL}/authors/all`, {
 			method: 'GET',
 		});
@@ -33,7 +33,7 @@ const Authors = {
 };
 
 const Courses = {
-	get: async (): Promise<GetCoursesResponse> => {
+	get: async (): Promise<ApiResponse<Course[]>> => {
 		const response = await fetch(`${baseURL}/courses/all`, {
 			method: 'GET',
 		});

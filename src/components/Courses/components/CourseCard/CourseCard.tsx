@@ -36,18 +36,15 @@ export const CourseCard: FC<Props> = ({ course }) => {
 			</Content>
 			<Actions>
 				<Link to={`/courses/${course.id}`}>
-					<Button buttonText='Show course' />
+					<Button>Show course</Button>
 				</Link>
-				<Button>
-					<span className='material-icons'>edit</span>
-				</Button>
+				<Button iconName='edit' />
 				<Button
+					iconName='delete'
 					onClick={() => {
 						dispatch(deleteCourseActionCreator(course.id));
 					}}
-				>
-					<span className='material-icons'>delete</span>
-				</Button>
+				></Button>
 			</Actions>
 		</Root>
 	);

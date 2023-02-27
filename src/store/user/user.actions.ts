@@ -5,11 +5,6 @@ export interface LoginAction {
 	payload: LoginResponse;
 }
 
-export interface RegisterAction {
-	type: userTypes.REGISTER;
-	payload: RegisterResponse;
-}
-
 export interface LogoutAction {
 	type: userTypes.LOGOUT;
 }
@@ -21,19 +16,10 @@ export const loginActionCreator = (payload: LoginResponse): LoginAction => {
 	};
 };
 
-export const registerActionCreator = (
-	payload: RegisterResponse
-): RegisterAction => {
-	return {
-		type: userTypes.REGISTER,
-		payload,
-	};
-};
-
 export const logoutActionCreator = (): LogoutAction => {
 	return {
 		type: userTypes.LOGOUT,
 	};
 };
 
-export type UserActionsUnion = LoginAction | RegisterAction | LogoutAction;
+export type UserActionsUnion = LoginAction | LogoutAction;

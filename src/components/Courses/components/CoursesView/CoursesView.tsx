@@ -18,7 +18,7 @@ const CoursesView: FC<Props> = ({ courses, searchOnCourses }) => {
 				<SearchBar searchOnCourses={searchOnCourses} />
 				<div className='actions'>
 					<Link to='/courses/add' relative='path'>
-						<Button buttonText='Add new course' />
+						<Button>Add new course</Button>
 					</Link>
 				</div>
 			</div>

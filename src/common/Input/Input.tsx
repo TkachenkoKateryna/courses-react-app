@@ -1,5 +1,6 @@
 import { FC, SyntheticEvent } from 'react';
 import styled from 'styled-components';
+import Error from '../Error/Error';
 
 interface Props {
 	className?: string;
@@ -89,8 +90,4 @@ const Wrapper = styled.div`
 	span {
 		font-weight: 700;
 	}
-`;
-
-const Error = styled.p`
-	color: #c88080;
 `;

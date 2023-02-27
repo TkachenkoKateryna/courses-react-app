@@ -17,27 +17,20 @@ export const userReducer = (
 	state = initialState,
 	action: UserActionsUnion
 ): UserState => {
-	let result = state;
 	switch (action.type) {
 		case userTypes.LOGIN:
-			result = {
-				...state,
+			return {
 				user: action.payload.user,
 				isAuth: true,
 				token: action.payload.result,
 			};
-			break;
 		case userTypes.LOGOUT:
-			result = {
-				...state,
+			return {
 				user: initialState.user,
 				isAuth: false,
 				token: '',
 			};
-			break;
 		default:
-			break;
+			return state;
 	}
-
-	return result;
 };

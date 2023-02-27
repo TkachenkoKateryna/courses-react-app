@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 import Button from '../../common/Button/Button';
+import Error from '../../common/Error/Error';
 import Input from '../../common/Input/Input';
 import { getCourseDuration } from '../../helpers/getCourseDuration';
 import AuthorItem from './components/AuthorItem/AuthorItem';
@@ -101,7 +102,7 @@ const CreateCourse: FC<Props> = ({ addCourse, addAuthor, authors }) => {
 		<Root>
 			<div className='navigation'>
 				<Link to='/'>
-					<Button buttonText='Return to Courses page' />
+					<Button>Return to Courses page</Button>
 				</Link>
 			</div>
 			<div className='course-form-wrapper'>
@@ -178,7 +179,7 @@ const CreateCourse: FC<Props> = ({ addCourse, addAuthor, authors }) => {
 								))}
 						</div>
 					</div>
-					<Button disabled={hasError && !isValid} buttonText='Submit' />
+					<Button disabled={hasError && !isValid}>Submit</Button>
 				</form>
 			</div>
 			<div className='author-form-wrapper'>
@@ -253,8 +254,4 @@ const Root = styled.div`
 			width: 50%;
 		}
 	}
-`;
-
-const Error = styled.p`
-	color: #c88080;
 `;

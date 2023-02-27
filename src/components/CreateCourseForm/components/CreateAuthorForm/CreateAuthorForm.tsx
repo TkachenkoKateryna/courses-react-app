@@ -32,7 +32,7 @@ const CreateAuthorForm: FC<Props> = ({ addAuthor }) => {
 				onChange={onChangeHandler}
 				placeholder='Set author name'
 			/>
-			<Button buttonText='Submit' />
+			<Button>Submit</Button>
 		</Form>
 	);
 };

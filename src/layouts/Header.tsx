@@ -6,13 +6,13 @@ import { useSelector, useDispatch } from 'react-redux';
 import { ReactComponent as ReactLogo } from '../assets/images/logo.svg';
 import Button from '../common/Button/Button';
 import { logoutActionCreator } from '../store/user/user.actions';
-import { getAuthState, getUser } from '../store/user/user.selectors';
+import { isUserAuthorized, getUser } from '../store/user/user.selectors';
 
 const Header: FC = () => {
 	const dispatch = useDispatch();
 
 	const user = useSelector(getUser);
-	const isAuth = useSelector(getAuthState);
+	const isAuth = useSelector(isUserAuthorized);
 
 	const logoutHandler = () => {
 		dispatch(logoutActionCreator());
@@ -26,12 +26,12 @@ const Header: FC = () => {
 				{isAuth ? (
 					<div className='actions'>
 						<h3>{user?.name}</h3>
-						<Button buttonText='Logout' onClick={logoutHandler} />
+						<Button onClick={logoutHandler}>Logout</Button>
 					</div>
 				) : (
 					<div className='actions'>
 						<Link to='/auth/login'>
-							<Button buttonText='Login' />
+							<Button>Login</Button>
 						</Link>
 					</div>
 				)}

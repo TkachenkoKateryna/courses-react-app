@@ -1,15 +1,15 @@
 import { FC, PropsWithChildren } from 'react';
 import styled from 'styled-components';
 
-interface Props extends PropsWithChildren {
-	buttonText?: string;
+interface Props {
+	iconName?: string;
 	onClick?: () => void;
 	className?: string;
 	disabled?: boolean;
 }
 
-const Button: FC<Props> = ({
-	buttonText,
+const Button: FC<PropsWithChildren<Props>> = ({
+	iconName,
 	onClick,
 	children,
 	className,
@@ -17,7 +17,8 @@ const Button: FC<Props> = ({
 }) => {
 	return (
 		<button disabled={disabled} className={className} onClick={onClick}>
-			{buttonText || children}
+			<span className='material-icons'>{iconName}</span>
+			{children}
 		</button>
 	);
 };
