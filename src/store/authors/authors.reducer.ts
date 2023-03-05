@@ -3,10 +3,14 @@ import { authorsTypes } from './authors.types';
 
 export interface AuthorsState {
 	authors: Author[];
+	loading: boolean;
+	loaded: boolean;
 }
 
 const initialState: AuthorsState = {
 	authors: [],
+	loading: false,
+	loaded: false,
 };
 
 export const authorsReducer = (
@@ -14,13 +18,28 @@ export const authorsReducer = (
 	action: AuthorsActionsUnion
 ): AuthorsState => {
 	switch (action.type) {
-		case authorsTypes.GET:
+		case authorsTypes.FETCH_AUTHORS:
 			return {
-				authors: action.payload,
+				...state,
+				loading: true,
 			};
-		case authorsTypes.ADD:
+		case authorsTypes.FETCH_AUTHORS_SUCCESS:
 			return {
+				...state,
+				authors: action.payload,
+				loading: false,
+				loaded: true,
+			};
+		case authorsTypes.ADD_AUTHOR:
+			return {
+				...state,
+				loading: true,
+			};
+		case authorsTypes.ADD_AUTHOR_SUCCESS:
+			return {
+				...state,
 				authors: [...state.authors, action.payload],
+				loading: false,
 			};
 		default:
 			return state;

@@ -1,22 +1,42 @@
-import { FC, SyntheticEvent, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { FC, SyntheticEvent, useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 
 import Button from '../../common/Button/Button';
 import Error from '../../common/Error/Error';
 import Input from '../../common/Input/Input';
 import { getCourseDuration } from '../../helpers/getCourseDuration';
+import {
+	getAuthors,
+	getIsAuthorLoaded,
+} from '../../store/authors/authors.selectors';
+import { fetchAuthorsThunk } from '../../store/authors/authors.thunks';
+import {
+	getCourseById,
+	getCourseItem,
+} from '../../store/courses/courses.selectors';
+import {
+	addCourseThunk,
+	editCourseThunk,
+	fetchCourseByIdThunk,
+} from '../../store/courses/courses.thunks';
 import AuthorItem from './components/AuthorItem/AuthorItem';
 import CreateAuthorForm from './components/CreateAuthorForm/CreateAuthorForm';
+import { getIsCourseLoaded } from './../../store/courses/courses.selectors';
 
-interface Props {
-	addCourse: (newCourse: CreateCourseFormValues) => void;
-	addAuthor: (newAuthor: CreateAuthorFormValues) => void;
-	authors: Author[];
-}
-
-const CreateCourse: FC<Props> = ({ addCourse, addAuthor, authors }) => {
+const CreateCourse: FC = () => {
 	const navigate = useNavigate();
+	const dispatch = useDispatch();
+	const { courseId } = useParams();
+	const authors = useSelector(getAuthors);
+	const isLoaded = useSelector(getIsCourseLoaded);
+	const areAuthorsLoaded = useSelector(getIsAuthorLoaded);
+	const courseItem = isLoaded
+		? useSelector(getCourseById(courseId as string))
+		: useSelector(getCourseItem);
+
+	const isEdit = !!courseId;
 
 	const [courseForm, setCourseForm] = useState<CreateCourseFormValues>({
 		title: '',
@@ -35,6 +55,30 @@ const CreateCourse: FC<Props> = ({ addCourse, addAuthor, authors }) => {
 
 	const [hasError, setHasError] = useState(false);
 
+	useEffect(() => {
+		if (!isLoaded && courseId) {
+			dispatch(fetchCourseByIdThunk(courseId));
+		}
+	}, [courseId, isLoaded]);
+
+	useEffect(() => {
+		if (!areAuthorsLoaded) {
+			dispatch(fetchAuthorsThunk());
+		}
+	}, [areAuthorsLoaded]);
+
+	useEffect(() => {
+		if (isEdit) {
+			setCourseForm(courseItem as Course);
+			setCourseFormErrors((prevState) => ({
+				...prevState,
+				title: '',
+				description: '',
+				authors: '',
+			}));
+		}
+	}, [courseItem, isEdit]);
+
 	const isValid = !Object.values(courseFormErrors).some((course) => course);
 
 	const submitHandler = (event: SyntheticEvent) => {
@@ -45,7 +89,10 @@ const CreateCourse: FC<Props> = ({ addCourse, addAuthor, authors }) => {
 			return;
 		}
 
-		addCourse(courseForm);
+		isEdit
+			? dispatch(editCourseThunk(courseForm, courseId))
+			: dispatch(addCourseThunk(courseForm));
+
 		navigate('/courses');
 	};
 
@@ -184,7 +231,7 @@ const CreateCourse: FC<Props> = ({ addCourse, addAuthor, authors }) => {
 			</div>
 			<div className='author-form-wrapper'>
 				<h2>Create Author</h2>
-				<CreateAuthorForm addAuthor={addAuthor} />
+				<CreateAuthorForm />
 			</div>
 		</Root>
 	);

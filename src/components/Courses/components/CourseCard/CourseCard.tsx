@@ -1,10 +1,12 @@
 import { FC } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
-import { useDispatch } from 'react-redux';
 
 import Button from '../../../../common/Button/Button';
-import { Link } from 'react-router-dom';
-import { deleteCourseActionCreator } from '../../../../store/courses/courses.actions';
+import { UserRole } from '../../../../constants/userRole';
+import { removeCourseThunk } from '../../../../store/courses/courses.thunks';
+import { getUserRole } from '../../../../store/user/user.selectors';
 
 interface Props {
 	course: CourseView;
@@ -12,6 +14,7 @@ interface Props {
 
 export const CourseCard: FC<Props> = ({ course }) => {
 	const dispatch = useDispatch();
+	const userRole = useSelector(getUserRole);
 
 	return (
 		<Root>
@@ -38,13 +41,19 @@ export const CourseCard: FC<Props> = ({ course }) => {
 				<Link to={`/courses/${course.id}`}>
 					<Button>Show course</Button>
 				</Link>
-				<Button iconName='edit' />
-				<Button
-					iconName='delete'
-					onClick={() => {
-						dispatch(deleteCourseActionCreator(course.id));
-					}}
-				></Button>
+				{userRole === UserRole.ADMIN && (
+					<>
+						<Link to={`/courses/update/${course.id}`}>
+							<Button iconName='edit' />
+						</Link>
+						<Button
+							iconName='delete'
+							onClick={() => {
+								dispatch(removeCourseThunk(course.id));
+							}}
+						/>
+					</>
+				)}
 			</Actions>
 		</Root>
 	);

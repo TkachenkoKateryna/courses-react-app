@@ -1,11 +1,14 @@
 import { FC, SyntheticEvent, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
-import agent from '../../../api/agent';
 import Button from '../../../common/Button/Button';
 import Input from '../../../common/Input/Input';
+import { ButtonLoader } from '../../../common/Loader/ButtonLoader';
 import { getFieldName } from '../../../helpers/common';
+import { isUserLoading } from '../../../store/user/user.selectors';
+import { registerThunk } from '../../../store/user/user.thunks';
 
 interface Props {
 	className?: string;
@@ -13,6 +16,8 @@ interface Props {
 
 const RegistrationForm: FC<Props> = ({ className }) => {
 	const navigate = useNavigate();
+	const dispatch = useDispatch();
+	const isLoading = useSelector(isUserLoading);
 
 	const [registrationForm, setRegistrationForm] = useState<AuthFormValues>({
 		name: '',
@@ -48,7 +53,9 @@ const RegistrationForm: FC<Props> = ({ className }) => {
 			return;
 		}
 
-		const { successful, errors } = await agent.Auth.register(registrationForm);
+		const { successful, errors } = await dispatch(
+			registerThunk(registrationForm)
+		);
 
 		if (successful) {
 			navigate('/auth/login');
@@ -94,7 +101,7 @@ const RegistrationForm: FC<Props> = ({ className }) => {
 					errorText={registrationErrors.password}
 					hasError={hasError}
 				/>
-				<Button>Registration</Button>
+				<Button>{isLoading ? <ButtonLoader /> : 'Registration'}</Button>
 			</form>
 			<p>
 				If you have an account you can <Link to='/auth/login'>login</Link>

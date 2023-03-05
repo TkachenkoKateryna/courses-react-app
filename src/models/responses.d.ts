@@ -9,3 +9,7 @@ interface RegisterResponse {
 	successful: string;
 	errors: string[];
 }
+
+interface SuccessResponse {
+	successful: boolean;
+}

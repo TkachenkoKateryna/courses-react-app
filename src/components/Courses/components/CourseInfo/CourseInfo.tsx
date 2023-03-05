@@ -1,17 +1,39 @@
-import { FC } from 'react';
+import isEmpty from 'lodash.isempty';
+import { FC, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link, useParams } from 'react-router-dom';
 import styled from 'styled-components';
+
 import Button from '../../../../common/Button/Button';
+import { PageLoader } from '../../../../common/Loader/PageLoader';
+import { formatCreationDate } from '../../../../helpers/formatCreationDate';
+import { getCourseDuration } from '../../../../helpers/getCourseDuration';
+import {
+	getCourseById,
+	getCourseItem,
+	getIsCourseLoaded,
+	getIsCourseLoading,
+} from '../../../../store/courses/courses.selectors';
+import { fetchCourseByIdThunk } from '../../../../store/courses/courses.thunks';
 
-interface Props {
-	getCourseById: (courseId: string) => CourseView | undefined;
-}
-
-const CourseInfo: FC<Props> = ({ getCourseById }) => {
+const CourseInfo: FC = () => {
+	const dispatch = useDispatch();
+	const isLoading = useSelector(getIsCourseLoading);
+	const isLoaded = useSelector(getIsCourseLoaded);
 	const { courseId } = useParams();
-	const course = getCourseById(String(courseId));
+	const course = isLoaded
+		? useSelector(getCourseById(courseId as string))
+		: useSelector(getCourseItem);
 
-	if (!course) {
+	useEffect(() => {
+		if (!isLoaded && courseId) {
+			dispatch(fetchCourseByIdThunk(courseId));
+		}
+	}, [courseId, isLoaded]);
+
+	if (isLoading) return <PageLoader />;
+
+	if (isEmpty(course)) {
 		return <>Course undefined!</>;
 	}
 
@@ -30,16 +52,16 @@ const CourseInfo: FC<Props> = ({ getCourseById }) => {
 					</p>
 					<p>
 						<span>Duration: </span>
-						{course.duration}
+						{getCourseDuration(course.duration)}
 					</p>
 					<p>
 						<span>Created: </span>
-						{course.creationDate}
+						{formatCreationDate(course.creationDate)}
 					</p>
 					<div>
 						<span>Authors: </span>
 						<ul>
-							{course.authors.split(',').map((a) => (
+							{course.authors.map((a) => (
 								<li>{a}</li>
 							))}
 						</ul>

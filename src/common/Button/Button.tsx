@@ -17,7 +17,7 @@ const Button: FC<PropsWithChildren<Props>> = ({
 }) => {
 	return (
 		<button disabled={disabled} className={className} onClick={onClick}>
-			<span className='material-icons'>{iconName}</span>
+			{iconName && <span className='material-icons'>{iconName}</span>}
 			{children}
 		</button>
 	);
@@ -26,6 +26,7 @@ const Button: FC<PropsWithChildren<Props>> = ({
 export default styled(Button)`
 	width: fit-content;
 	padding: 10px;
+	min-width: 100px;
 	height: 40px;
 	background: rgb(90, 106, 206);
 	color: white;

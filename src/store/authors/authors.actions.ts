@@ -1,29 +1,55 @@
 import { authorsTypes } from './authors.types';
 
-interface GetAuthorsAction {
-	type: authorsTypes.GET;
+interface FetchAuthorsAction {
+	type: authorsTypes.FETCH_AUTHORS;
+}
+
+interface FetchAuthorsSuccessAction {
+	type: authorsTypes.FETCH_AUTHORS_SUCCESS;
 	payload: Author[];
 }
 
 interface AddAuthorAction {
-	type: authorsTypes.ADD;
+	type: authorsTypes.ADD_AUTHOR;
+}
+
+interface AddAuthorSuccessAction {
+	type: authorsTypes.ADD_AUTHOR_SUCCESS;
 	payload: Author;
 }
 
-export const getAuthorsActionCreator = (
+export const fetchAuthorsActionCreator = (): FetchAuthorsAction => {
+	return {
+		type: authorsTypes.FETCH_AUTHORS,
+	};
+};
+
+export const fetchAuthorsActionSuccessCreator = (
 	payload: Author[]
-): GetAuthorsAction => {
+): FetchAuthorsSuccessAction => {
 	return {
-		type: authorsTypes.GET,
+		type: authorsTypes.FETCH_AUTHORS_SUCCESS,
 		payload,
 	};
 };
 
-export const addAuthorActionCreator = (payload: Author): AddAuthorAction => {
+export const addAuthorActionCreator = (): AddAuthorAction => {
 	return {
-		type: authorsTypes.ADD,
+		type: authorsTypes.ADD_AUTHOR,
+	};
+};
+
+export const addAuthorActionSuccessCreator = (
+	payload: Author
+): AddAuthorSuccessAction => {
+	return {
+		type: authorsTypes.ADD_AUTHOR_SUCCESS,
 		payload,
 	};
 };
 
-export type AuthorsActionsUnion = GetAuthorsAction | AddAuthorAction;
+export type AuthorsActionsUnion =
+	| FetchAuthorsAction
+	| FetchAuthorsSuccessAction
+	| AddAuthorAction
+	| AddAuthorSuccessAction;
