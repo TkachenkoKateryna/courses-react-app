@@ -6,7 +6,7 @@ import styled from 'styled-components';
 import Button from '../../../../common/Button/Button';
 import { UserRole } from '../../../../constants/userRole';
 import { removeCourseThunk } from '../../../../store/courses/courses.thunks';
-import { getUserRole } from '../../../../store/user/user.selectors';
+import { getIsAdminRole } from '../../../../store/user/user.selectors';
 
 interface Props {
 	course: CourseView;
@@ -14,7 +14,7 @@ interface Props {
 
 export const CourseCard: FC<Props> = ({ course }) => {
 	const dispatch = useDispatch();
-	const userRole = useSelector(getUserRole);
+	const isAdminRole = useSelector(getIsAdminRole);
 
 	return (
 		<Root>
@@ -41,7 +41,7 @@ export const CourseCard: FC<Props> = ({ course }) => {
 				<Link to={`/courses/${course.id}`}>
 					<Button>Show course</Button>
 				</Link>
-				{userRole === UserRole.ADMIN && (
+				{isAdminRole && (
 					<>
 						<Link to={`/courses/update/${course.id}`}>
 							<Button iconName='edit' />

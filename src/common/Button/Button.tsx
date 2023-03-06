@@ -1,4 +1,5 @@
 import { FC, PropsWithChildren } from 'react';
+import { ClipLoader } from 'react-spinners';
 import styled from 'styled-components';
 
 interface Props {
@@ -6,6 +7,7 @@ interface Props {
 	onClick?: () => void;
 	className?: string;
 	disabled?: boolean;
+	isLoading?: boolean;
 }
 
 const Button: FC<PropsWithChildren<Props>> = ({
@@ -13,12 +15,17 @@ const Button: FC<PropsWithChildren<Props>> = ({
 	onClick,
 	children,
 	className,
+	isLoading = false,
 	disabled = false,
 }) => {
 	return (
 		<button disabled={disabled} className={className} onClick={onClick}>
 			{iconName && <span className='material-icons'>{iconName}</span>}
-			{children}
+			{isLoading ? (
+				<ClipLoader color='#fff' speedMultiplier={0.5} size={15} />
+			) : (
+				children
+			)}
 		</button>
 	);
 };

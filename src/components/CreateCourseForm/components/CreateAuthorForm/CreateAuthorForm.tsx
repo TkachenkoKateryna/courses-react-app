@@ -4,7 +4,6 @@ import styled from 'styled-components';
 
 import Button from '../../../../common/Button/Button';
 import Input from '../../../../common/Input/Input';
-import { ButtonLoader } from '../../../../common/Loader/ButtonLoader';
 import { getIsAuthorLoading } from '../../../../store/authors/authors.selectors';
 import { addAuthorThunk } from '../../../../store/authors/authors.thunks';
 
@@ -34,7 +33,7 @@ const CreateAuthorForm: FC = () => {
 				onChange={onChangeHandler}
 				placeholder='Set author name'
 			/>
-			<Button>{isLoading ? <ButtonLoader /> : 'Submit'}</Button>
+			<Button isLoading={isLoading}>'Submit'</Button>
 		</Form>
 	);
 };

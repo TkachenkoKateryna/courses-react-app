@@ -35,9 +35,12 @@ const CoursesView: FC = () => {
 	const [searchText, setSearchText] = useState('');
 
 	useEffect(() => {
-		!isCourseLoaded && dispatch(fetchCoursesThunk());
 		!isAuthorLoaded && dispatch(fetchAuthorsThunk());
-	}, []);
+	}, [isAuthorLoaded]);
+
+	useEffect(() => {
+		!isCourseLoaded && dispatch(fetchCoursesThunk());
+	}, [isCourseLoaded]);
 
 	const updatedCourses: CourseView[] = courses
 		.map((c) => ({

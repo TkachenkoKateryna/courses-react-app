@@ -8,6 +8,7 @@ import {
 } from './authors.actions';
 
 export const fetchAuthorsThunk = (): ThunkAction => {
+	console.log('2');
 	return async (dispatch) => {
 		dispatch(fetchAuthorsActionCreator());
 		const { successful, result: authors } = await axiosAgent.Authors.get();

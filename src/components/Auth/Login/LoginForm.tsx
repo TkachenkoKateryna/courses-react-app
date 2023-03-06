@@ -5,7 +5,6 @@ import styled from 'styled-components';
 
 import Button from '../../../common/Button/Button';
 import Input from '../../../common/Input/Input';
-import { ButtonLoader } from '../../../common/Loader/ButtonLoader';
 import { getFieldName } from '../../../helpers/common';
 import { isUserLoading } from '../../../store/user/user.selectors';
 import { loginThunk } from '../../../store/user/user.thunks';
@@ -104,7 +103,7 @@ const LoginForm: FC<Props> = ({ className }) => {
 					errorText={loginFormErrors.password}
 					hasError={hasError}
 				/>
-				<Button>{isLoading ? <ButtonLoader /> : 'Login'}</Button>
+				<Button isLoading={isLoading}>Login</Button>
 			</form>
 			<p>
 				If you have an account you can <Link to='/auth/register'>register</Link>

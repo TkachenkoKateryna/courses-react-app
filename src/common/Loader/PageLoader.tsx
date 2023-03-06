@@ -1,7 +1,8 @@
+import { FC } from 'react';
 import { BeatLoader } from 'react-spinners';
 import styled from 'styled-components';
 
-export const PageLoader = () => {
+export const PageLoader: FC = () => {
 	return (
 		<Root>
 			<BeatLoader size={30} color='rgb(90, 106, 206)' speedMultiplier={0.5} />
