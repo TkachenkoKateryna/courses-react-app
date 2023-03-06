@@ -1,13 +1,13 @@
 import { FC, SyntheticEvent, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
-import agent from '../../../api/agent';
 import Button from '../../../common/Button/Button';
 import Input from '../../../common/Input/Input';
 import { getFieldName } from '../../../helpers/common';
-import { loginActionCreator } from '../../../store/user/user.actions';
+import { isUserLoading } from '../../../store/user/user.selectors';
+import { loginThunk } from '../../../store/user/user.thunks';
 
 interface Props {
 	className?: string;
@@ -16,6 +16,7 @@ interface Props {
 const LoginForm: FC<Props> = ({ className }) => {
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
+	const isLoading = useSelector(isUserLoading);
 
 	const [loginForm, setLoginForm] = useState<AuthFormValues>({
 		name: '',
@@ -43,12 +44,9 @@ const LoginForm: FC<Props> = ({ className }) => {
 	};
 
 	const loginHandler = async (values: AuthFormValues) => {
-		const data = await agent.Auth.login(values);
-
+		const data = await dispatch(loginThunk(values));
 		if (data.successful) {
-			dispatch(loginActionCreator(data));
-			localStorage.setItem('jwt', data.result);
-			navigate('/');
+			navigate('/courses');
 		}
 
 		if (data.errors) {
@@ -105,7 +103,7 @@ const LoginForm: FC<Props> = ({ className }) => {
 					errorText={loginFormErrors.password}
 					hasError={hasError}
 				/>
-				<Button>Login</Button>
+				<Button isLoading={isLoading}>Login</Button>
 			</form>
 			<p>
 				If you have an account you can <Link to='/auth/register'>register</Link>

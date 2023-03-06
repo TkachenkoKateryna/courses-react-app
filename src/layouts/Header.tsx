@@ -1,22 +1,23 @@
 import { FC } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { useSelector, useDispatch } from 'react-redux';
 
 import { ReactComponent as ReactLogo } from '../assets/images/logo.svg';
 import Button from '../common/Button/Button';
-import { logoutActionCreator } from '../store/user/user.actions';
 import { isUserAuthorized, getUser } from '../store/user/user.selectors';
+import { logoutThunk } from '../store/user/user.thunks';
 
 const Header: FC = () => {
 	const dispatch = useDispatch();
+	const navigate = useNavigate();
 
 	const user = useSelector(getUser);
 	const isAuth = useSelector(isUserAuthorized);
 
-	const logoutHandler = () => {
-		dispatch(logoutActionCreator());
-		localStorage.removeItem('jwt');
+	const logoutHandler = async () => {
+		await dispatch(logoutThunk());
+		navigate('/');
 	};
 
 	return (

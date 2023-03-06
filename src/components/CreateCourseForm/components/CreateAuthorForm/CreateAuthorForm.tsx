@@ -1,15 +1,16 @@
 import { FC, SyntheticEvent, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 
 import Button from '../../../../common/Button/Button';
 import Input from '../../../../common/Input/Input';
+import { getIsAuthorLoading } from '../../../../store/authors/authors.selectors';
+import { addAuthorThunk } from '../../../../store/authors/authors.thunks';
 
-interface Props {
-	addAuthor: (newAuthor: CreateAuthorFormValues) => void;
-}
-
-const CreateAuthorForm: FC<Props> = ({ addAuthor }) => {
+const CreateAuthorForm: FC = () => {
 	const [author, setAuthor] = useState<CreateAuthorFormValues>({ name: '' });
+	const dispatch = useDispatch();
+	const isLoading = useSelector(getIsAuthorLoading);
 
 	const onChangeHandler = (name: string, value: string) => {
 		setAuthor((prevState) => ({ ...prevState, [name]: value }));
@@ -18,7 +19,7 @@ const CreateAuthorForm: FC<Props> = ({ addAuthor }) => {
 	const onSubmitHandler = (event: SyntheticEvent) => {
 		event.preventDefault();
 
-		addAuthor(author);
+		dispatch(addAuthorThunk(author));
 		setAuthor({ name: '' });
 	};
 
@@ -32,7 +33,7 @@ const CreateAuthorForm: FC<Props> = ({ addAuthor }) => {
 				onChange={onChangeHandler}
 				placeholder='Set author name'
 			/>
-			<Button>Submit</Button>
+			<Button isLoading={isLoading}>'Submit'</Button>
 		</Form>
 	);
 };
