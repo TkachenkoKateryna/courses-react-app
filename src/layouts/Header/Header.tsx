@@ -3,10 +3,10 @@ import { Link, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { useSelector, useDispatch } from 'react-redux';
 
-import { ReactComponent as ReactLogo } from '../assets/images/logo.svg';
-import Button from '../common/Button/Button';
-import { isUserAuthorized, getUser } from '../store/user/user.selectors';
-import { logoutThunk } from '../store/user/user.thunks';
+import { ReactComponent as ReactLogo } from '../../assets/images/logo.svg';
+import Button from '../../common/Button/Button';
+import { isUserAuthorized, getUser } from '../../store/user/user.selectors';
+import { logoutThunk } from '../../store/user/user.thunks';
 
 const Header: FC = () => {
 	const dispatch = useDispatch();

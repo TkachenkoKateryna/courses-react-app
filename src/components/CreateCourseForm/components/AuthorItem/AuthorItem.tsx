@@ -16,7 +16,7 @@ const AuthorItem: FC<Props> = ({
 	isInCourse,
 }) => {
 	return (
-		<div className={className}>
+		<div className={className} data-testid='author-listItem'>
 			<p>{author.name}</p>
 			<Button
 				onClick={() => {

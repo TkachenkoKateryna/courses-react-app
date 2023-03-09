@@ -4,7 +4,6 @@ import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
 import Button from '../../../../common/Button/Button';
-import { UserRole } from '../../../../constants/userRole';
 import { removeCourseThunk } from '../../../../store/courses/courses.thunks';
 import { getIsAdminRole } from '../../../../store/user/user.selectors';
 
@@ -17,7 +16,7 @@ export const CourseCard: FC<Props> = ({ course }) => {
 	const isAdminRole = useSelector(getIsAdminRole);
 
 	return (
-		<Root>
+		<Root data-testid='course-card'>
 			<Content>
 				<MainInfo>
 					<h2>{course.title}</h2>

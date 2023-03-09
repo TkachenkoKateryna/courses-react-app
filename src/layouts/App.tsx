@@ -2,10 +2,10 @@ import { FC, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
+
 import { PageLoader } from '../common/Loader/PageLoader';
 import { getCurrentUserThunk } from '../store/user/user.thunks';
-
-import Header from './Header';
+import Header from './Header/Header';
 
 interface Props {
 	className?: string;
