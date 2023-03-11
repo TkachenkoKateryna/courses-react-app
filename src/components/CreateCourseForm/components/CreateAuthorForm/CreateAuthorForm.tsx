@@ -33,7 +33,7 @@ const CreateAuthorForm: FC = () => {
 				onChange={onChangeHandler}
 				placeholder='Set author name'
 			/>
-			<Button isLoading={isLoading}>'Submit'</Button>
+			<Button isLoading={isLoading}>Submit author</Button>
 		</Form>
 	);
 };

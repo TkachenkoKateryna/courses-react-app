@@ -14,7 +14,6 @@ import {
 } from './courses.actions';
 
 export const fetchCoursesThunk = (): ThunkAction => {
-	console.log('1');
 	return async (dispatch) => {
 		dispatch(fetchCoursesActionCreator());
 		const { successful, result: courses } = await axiosAgent.Courses.get();

@@ -72,7 +72,7 @@ const CoursesView: FC = () => {
 				<div className='actions'>
 					{userRole === UserRole.ADMIN && (
 						<Link to='/courses/add' relative='path'>
-							<Button>Add new course</Button>
+							<Button data-testid='add-course-btn'>Add new course</Button>
 						</Link>
 					)}
 				</div>

@@ -1,3 +1,5 @@
+import { UserRole } from './userRole';
+
 export const mockedCoursesList: Course[] = [
 	{
 		id: 'de5aaa59-90f5-4dbc-b8a9-aaf205c551ba',
@@ -29,6 +31,19 @@ export const mockedCoursesList: Course[] = [
 	},
 ];
 
+export const mockedCourse: Course = {
+	id: 'c5630fdd-7bf7-4d39-b75a-2b5906fd0916',
+	title: 'Angular',
+	description:
+		'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum',
+	creationDate: '10/11/2020',
+	duration: 210,
+	authors: [
+		'df32994e-b23d-497c-9e4d-84e4dc02882f',
+		'095a1817-d45b-4ed7-9cf7-b2417bcbf748',
+	],
+};
+
 export const mockedAuthorsList: Author[] = [
 	{
 		id: '27cc3006-e93a-4748-8ca8-73d06aa93b6d',
@@ -47,3 +62,15 @@ export const mockedAuthorsList: Author[] = [
 		name: 'Valentina Larina',
 	},
 ];
+
+export const mockedAdmin: User = {
+	name: 'Admin',
+	email: 'admin@email.com',
+	role: UserRole.ADMIN,
+};
+
+export const mockedUser: User = {
+	name: 'Admin',
+	email: 'admin@email.com',
+	role: UserRole.USER,
+};
